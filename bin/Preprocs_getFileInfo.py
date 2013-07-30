@@ -1,8 +1,6 @@
-#coding=utf-8
+# -*- coding:utf-8 -*-
 
-'''
-	return file ID, title and content
-'''
+#	return file ID, title and content
 
 import os
 import codecs
@@ -68,13 +66,13 @@ def getFileInfo(filename):
 					ContentBegin = True
 					ContentStr = ''
 		
-	except IOError as err1:
-		#print("open raw data file error :" + str(err1))
+	except IOError as RRDErr:
+		#print("Read Raw Data file Error : " + str(RRDErr))
 		pass
-	except UnicodeDecodeError as err2:
+	except UnicodeDecodeError as UDErr:
 		#print('-------UnicodeDecodeError--------')
 		#print(filename)
-		#print('UnicodeDecodeError :' + str(err2))
+		#print('UnicodeDecodeError : ' + str(UDErr))
 		pass
 
 	FileInfo.append(FileID)

@@ -6,3 +6,5 @@
 字符编码cp XXX
 
 #XML转义字符处理，代码改进，参考深入python3， 07闭合与生成器－匹配模式列表
+
+#encoding = 'utf-16 LE with BOM'
