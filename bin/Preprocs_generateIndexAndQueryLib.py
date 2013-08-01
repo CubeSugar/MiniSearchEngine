@@ -13,6 +13,9 @@ import sys
 import re
 
 def generateIndexAndQueryLib():
+	if (str(os.getcwd()).split('/')[-1] != 'bin'):
+		os.chdir('./bin/')
+	
 	ConfPath        = '../search.conf'
 	DataPath        = '../data'
 	QueryKeyWord    = r'Query_Lib'
@@ -90,7 +93,7 @@ def generateIndexAndQueryLib():
 		print('Write IndexLibFile Error : ' + str(WIErr))
 
 
-if __main__ == '__main__':
+if __name__ == '__main__':
 	generateIndexAndQueryLib()
 
 

@@ -1,5 +1,8 @@
 #include <iostream>
+//#include "Python.h"
+#include "/Library/Frameworks/Python.framework/Versions/3.3/include/python3.3m/Python.h"
 #include <Python/Python.h>
+#include <string>
 
 using namespace std;
 
@@ -12,7 +15,7 @@ int main()
         return -1;  
     }  
  
-    //PyRun_SimpleString("import sys");  
+    PyRun_SimpleString("import sys");  
     PyRun_SimpleString("sys.path.append('./')");  
 	PyObject *pName   = NULL;
 	PyObject *pModule = NULL;
@@ -20,8 +23,8 @@ int main()
 	PyObject *pFunc   = NULL;
 	PyObject *pArgs   = NULL;  
   
-    pName = PyString_FromString("Preprocs_generateRipepageLib");  
-    pModule = PyImport_Import(pName);  
+    //pName = PyString_FromString("Preprocs_generateRipepageLib");  
+    pModule = PyImport_ImportModule("Preprocs_generateRipepageLib");  
     if (!pModule)  
     {  
         printf("can't find Preprocs_generateRipepageLib.py");  

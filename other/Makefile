@@ -1,9 +1,12 @@
+//g++ Preprocs_genRipepageLib.cpp -o genRip -I/Library/Frameworks/Python.framework/Versions/3.3/include/python3.3m -L/Library/Frameworks/Python.framework/Versions/3.3/lib/ -lpython3.3
+
+
 CXX = g++ 
  
 TARGET = test_py
  
-C_FLAGS += -g -Wall -pthread
- 
+C_FLAGS += -g -Wall -lpthread
+
 INC = -I/usr/local/include/python2.7/
 LIB = -L/usr/local/lib/ -lpython2.7 -ldl -lutil
  
