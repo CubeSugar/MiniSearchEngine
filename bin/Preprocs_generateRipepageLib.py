@@ -45,17 +45,17 @@ def generateRipepageLib():
 	
 	#define tag string
 	QUERYS      = u'<query>'
-	QUERYE      = u'</query>\n'
-	DOCS        = u'\t<doc>'
-	DOCE        = u'\t</doc>\n'
-	DOCIDS      = u'\t\t<docid>'
-	DOCIDE      = u'</docid>\n'
-	DOCURLS     = u'\t\t<url>'
-	DOCURLE     = u'</url>\n'
-	DOCTITLES   = u'\t\t<title>'
-	DOCTITLEE   = u'</title>\n'
-	DOCCONTENTS = u'\t\t<content>'
-	DOCCONTENTE = u'</content>\n'
+	QUERYE      = u'</query>'
+	DOCS        = u'<doc>'
+	DOCE        = u'</doc>'
+	DOCIDS      = u'<docid>'
+	DOCIDE      = u'</docid>'
+	DOCURLS     = u'<url>'
+	DOCURLE     = u'</url>'
+	DOCTITLES   = u'<title>'
+	DOCTITLEE   = u'</title>'
+	DOCCONTENTS = u'<content>'
+	DOCCONTENTE = u'</content>'
 	
 	#stroe current work dir
 	RootPath = os.getcwd()
@@ -94,6 +94,8 @@ def generateRipepageLib():
 					if fnmatch.fnmatch(each_file, '*.txt'):
 						#get file info
 						FileInfo = getFileInfo(each_file)
+						if FileInfo[1] == 'No Title':
+							continue
 						#<doc>
 						print(DOCS, file = outpotfile)
 						#<dcoid></docid>
