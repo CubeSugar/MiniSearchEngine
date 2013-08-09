@@ -24,7 +24,7 @@ def getFileInfo(filename):
 	try:
 		with codecs.open(filename, 'r', 'gb18030') as FileName: #file code = gb18030
 			for each_line in FileName:
-				each_line = each_line.strip()
+				#each_line = each_line.strip()
 				
 				#file title end
 				if len(re.findall('【', each_line)) > 0:
@@ -33,12 +33,12 @@ def getFileInfo(filename):
 				#get file title
 				if TitleBegin:	
 					#delete space char by ''join(s.split())
-					Title = Title + ''.join(each_line.split())
+					Title = Title + ''.join(each_line.strip().split())
 					
 				elif len(re.findall(r'【\s*标\s*题\s*】', each_line)) > 0: 
 					#file title begin
 					TitleBegin = True
-					Title = str(each_line.split('】', 1)[1])
+					Title = str(each_line.strip().split('】', 1)[1])
 					continue
 
 				#get file content
@@ -49,7 +49,7 @@ def getFileInfo(filename):
 						break
 
 					#trim each_line
-					new_content_line = u''.join(each_line.split())
+					#new_content_line = u''.join(each_line.split())
 
 					#replace the & < > " ' with xml escape code
 					#new_content_line = re.sub('&', u'&amp;', new_content_line)
@@ -58,8 +58,9 @@ def getFileInfo(filename):
 					#new_content_line = re.sub('\"', u'&quot;', new_content_line)
 					#new_content_line = re.sub("\'", u'&apos;', new_content_line)
 
+					new_content_line = re.sub('\s', u' ', each_line)
 					#get file content
-					ContentStr = ContentStr + new_content_line# + '\n'
+					ContentStr = ContentStr + new_content_line
 					
 				elif len(re.findall(r'【\s*正\s*文\s*】', each_line)) > 0: 
 					#file content begin
