@@ -11,6 +11,7 @@
 import os
 import sys
 import re
+import urllib
 
 def generateIndexAndQueryLib():
 	if (str(os.getcwd()).split('/')[-1] != 'bin'):
@@ -63,8 +64,10 @@ def generateIndexAndQueryLib():
 				if pos > -1:
 					key = str(each_line.strip().split('>', 1)[1])
 					QueryKeyList.append(key)
-					pos = each_line.find(QueryTag[-1])	#查找字符串末尾字符的位置，需要对字符串进行切片
-					OffsetList.append(ByteCounter + pos * 2 + len(key) * 2 + 2)
+					
+					OffsetList.append(ByteCounter) #<query>标签开始处
+					#pos = each_line.find(QueryTag[-1])	#查找字符串末尾字符的位置，需要对字符串进行切片
+					#OffsetList.append(ByteCounter + pos * 2 + len(key) * 2 + 2)
 
 				ByteCounter = ByteCounter + len(each_line) * 2
 			
@@ -78,7 +81,7 @@ def generateIndexAndQueryLib():
 
 	#输出Query_Lib
 	try:
-		with open(QueryLibFile, 'w', encoding = CodeStyle) as QFile:
+		with open(QueryLibFile, 'w', encoding = 'utf-8') as QFile: #, encoding = CodeStyle
 			for each_item in QueryKeyList:
 				print(each_item, file = QFile)
 	except IOError as WQErr:
@@ -86,7 +89,7 @@ def generateIndexAndQueryLib():
 
 	#输出Index_Lib
 	try:
-		with open(IndexLibFile, 'w', encoding = CodeStyle) as IFile:
+		with open(IndexLibFile, 'w', encoding = 'utf-8') as IFile: #, encoding = CodeStyle
 			for i in range(len(QueryKeyList)):
 				print(QueryKeyList[i] + '\t' + str(OffsetList[i]), file = IFile)
 	except IOError as WIErr:
