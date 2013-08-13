@@ -108,6 +108,20 @@ def generateRipepageLib():
 						print(DOCCONTENTS + FileInfo[2] + DOCCONTENTE, file = outpotfile)
 						#</doc>
 						print(DOCE, file = outpotfile)
+
+						#simulate duplicate
+						#<doc>
+						print(DOCS, file = outpotfile)
+						#<dcoid></docid>
+						print(DOCIDS + FileInfo[0] + DOCIDE, file = outpotfile)
+						#<url></url>
+						print(DOCURLS + u'https://www.google.com/' + FileInfo[0] + DOCURLE, file = outpotfile)
+						#<title></title>
+						print(DOCTITLES + FileInfo[1] + DOCTITLEE, file = outpotfile)
+						#<content></content>
+						print(DOCCONTENTS + FileInfo[2] + DOCCONTENTE, file = outpotfile)
+						#</doc>
+						print(DOCE, file = outpotfile)
 				#</query>
 				print(QUERYE, file = outpotfile)
 	except IOError as WRErr:
