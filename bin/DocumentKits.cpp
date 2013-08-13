@@ -1,3 +1,4 @@
+#include <cmath>
 #include "DocumentKits.h"
 #include "SegInterface_Use.h"
 #include "PosInterface_Use.h"
@@ -170,24 +171,24 @@ int DocumentKits::removeStopWords(const vector<string> &stopwords, map<string, i
     return 0;
 }
 
-int DocumentKits::delDuplicate(vector<Document *> &documentset)
+int DocumentKits::delDuplicate(list<Document *> &documentset)
 {
     //itrdocf --> fix
     //itrdocm --> move
    
-    for (vector<Document *>::iterator itrdocf = documentset.begin();
+    for (list<Document *>::iterator itrdocf = documentset.begin();
          itrdocf != documentset.end();
          ++itrdocf)
     {
         //do ++itrdocf at init statement
-
-        for (vector<Document *>::iterator itrdocm = itrdocf + 1;
-             itrdocm != documentset.end();)
+        list<Document *>::iterator itrdocm = itrdocf;
+        ++itrdocm;
+        while (itrdocm != documentset.end())
         {
             if (**itrdocf == **itrdocm)
             {
                 delete *itrdocm;
-                documentset.erase(itrdocm);
+                itrdocm = documentset.erase(itrdocm);
             }
             else
             {
@@ -198,9 +199,9 @@ int DocumentKits::delDuplicate(vector<Document *> &documentset)
     return 0;
 }
 
-int DocumentKits::generateAllWordsSet(const vector<Document *> &documentset, map<string, list<string> > &allwordset)
+int DocumentKits::generateAllWordsSet(const list<Document *> &documentset, map<string, list<string> > &allwordset)
 {
-    for (vector<Document *>::const_iterator itrdoc = documentset.begin();
+    for (list<Document *>::const_iterator itrdoc = documentset.begin();
          itrdoc != documentset.end();
          ++itrdoc)
     {
@@ -220,4 +221,79 @@ int DocumentKits::generateAllWordsSet(const vector<Document *> &documentset, map
         }
     }
     return 0;
+}
+
+int DocumentKits::initDocVector(const map<string, list<string> > &allwords, Document &doc)
+{
+    //cout << "docid = " << doc.m_DocID << endl;
+    double sumw = 0.0;
+    for (map<string, int>::iterator itrword = doc.m_UnqWords.begin();
+         itrword != doc.m_UnqWords.end();
+         ++itrword)
+    {
+        //cout << "sumw = " << sumw << endl;
+
+        map<string, list<string> >::const_iterator itrall = allwords.find(itrword->first);
+
+        //cout << "on finding " << endl;
+
+        if (itrall != allwords.end())
+        {
+            //cout << "find & copy" << " ";
+            double weight = (itrword->second) * ((itrall->second).size()) / 2;
+            doc.m_DocVector[itrword->first] = weight;
+            
+            //cout << "copy done!" << " ";
+            sumw += weight;
+        }
+        
+    }
+
+    //cout << "sumw = " << sumw << endl;
+
+    //gui 1 hua
+    for (map<string, double>::iterator itr = doc.m_DocVector.begin();
+         itr != doc.m_DocVector.end();
+         ++itr)
+    {
+        itr->second /= sumw;
+    }
+
+    //cout << "gui 1 hua done!" << endl;
+    return 0;
+}
+
+double DocumentKits::calcDocSimilarity(const Document &doc1, const Document &doc2)
+{
+    double subsum = 0.0;
+    double lendoc1 = 0.0;
+    double lendoc2 = 0.0;
+    double similarity = 0.0;
+
+    for (map<string, double>::const_iterator itr1 = doc1.m_DocVector.begin();
+         itr1 != doc1.m_DocVector.end();
+         ++itr1)
+    {
+        lendoc1 += itr1->second * itr1->second;
+
+        map<string, double>::const_iterator itr2 = doc2.m_DocVector.find(itr1->first);
+        if (itr2 != doc2.m_DocVector.end())
+        {
+            subsum += itr1->second * itr2->second;
+        }
+    }
+
+    //cout << "fen zi = " << subsum << endl;
+    //cout << "length 1 = " << lendoc1 << endl;
+
+    for (map<string, double>::const_iterator itr2 = doc2.m_DocVector.begin();
+         itr2 != doc2.m_DocVector.end();
+         ++itr2)
+    {
+        lendoc2 += itr2->second * itr2->second;
+    }
+
+    similarity = subsum / (sqrt(lendoc1) * sqrt(lendoc2));
+
+    return similarity;
 }

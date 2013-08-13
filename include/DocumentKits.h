@@ -36,9 +36,13 @@ public:
 
     int getTopWords(const map<string, int> &unqwords, vector<string> &topwords);
 
-    int delDuplicate(vector<Document *> &documentset);
+    int delDuplicate(list<Document *> &documentset);
 
-    int generateAllWordsSet(const vector<Document *> &documentset, map<string, list<string> > &allwordset);
+    int generateAllWordsSet(const list<Document *> &documentset, map<string, list<string> > &allwordset);
+
+    int initDocVector(const map<string, list<string> > &allwords, Document &doc);
+
+    double calcDocSimilarity(const Document &doc1, const Document &doc2);
 };
 
 #endif
