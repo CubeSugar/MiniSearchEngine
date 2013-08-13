@@ -41,10 +41,108 @@
         <h1>
 <a name="minisearchengine" class="anchor" href="#minisearchengine"><span class="octicon octicon-link"></span></a>MiniSearchEngine</h1>
 
-<hr><h2>
+<h2>
+<a name="brief-introduction" class="anchor" href="#brief-introduction"><span class="octicon octicon-link"></span></a>Brief Introduction</h2>
+
+<hr><h3>
+<a name="1-description" class="anchor" href="#1-description"><span class="octicon octicon-link"></span></a>1. Description</h3>
+
+<p>搜索引擎迷你项目，将网页/文本数据建库，去重，计算相似度生成检索资源；编写Linux守护进程以支持前台页面的查询请求。</p>
+
+<p>项目关键词：**分词**、**余弦相似度**、**VSM**、**倒排索引**、**守护进程**、**网络编程**等</p>
+
+<h3>
+<a name="2-develop-environment" class="anchor" href="#2-develop-environment"><span class="octicon octicon-link"></span></a>2. Develop Environment</h3>
+
+<ul>
+<li><p>Ubuntu 12.04</p></li>
+<li><p>g++ 4.6.3</p></li>
+<li><p>python 3.3.2</p></li>
+</ul><h3>
+<a name="3-directory-arch" class="anchor" href="#3-directory-arch"><span class="octicon octicon-link"></span></a>3. Directory Arch</h3>
+
+<p>
+MiniSearchEngine<br>
+├ bin<br>
+├ data<br>
+│    ├ Raw_Data<br>
+│    ├ ripepage.lib<br>
+│    ├ query.lib<br>
+│    └ index.lib<br>
+├ include<br>
+├ lib<br>
+│    ├ libcode.a<br>
+│    └ libelus.a<br>
+├ log<br>
+├ src<br>
+│    └ stopwordlist.txt<br>
+├ search_engine.conf<br>
+└ Makefile<br></p>
+
+<h3>
+<a name="4-module" class="anchor" href="#4-module"><span class="octicon octicon-link"></span></a>4. Module</h3>
+
+<h4>
+<a name="indexlib" class="anchor" href="#indexlib"><span class="octicon octicon-link"></span></a>index.lib</h4>
+
+<p>从ripepage.lib中读取query word的偏移位置，存储在index.lib文件中，格式如下：</p>
+
+<pre><code>queryword1 \t offset1
+queryword2 \t offset2
+…
+</code></pre>
+
+<h4>
+<a name="wordsegement" class="anchor" href="#wordsegement"><span class="octicon octicon-link"></span></a>WordSegement</h4>
+
+<p>调用分词库libcode.a libelus.a进行分词。</p>
+
+<p>分词原理的学习附在Reference部分。</p>
+
+<h4>
+<a name="delete-duplicate" class="anchor" href="#delete-duplicate"><span class="octicon octicon-link"></span></a>Delete Duplicate</h4>
+
+<ol>
+<li>
+<p>指纹法去重</p>
+
+<p>特征码：该网页/文本中词频最高的10个词；
+判重算法：对于每两篇，比较topword10的交集，如果交集大于6个，则认为是互为重复的网页。</p>
+</li>
+<li>
+<p>特征码去重</p>
+
+<p>特征码：提取该网页/文本中每个逗号前后的5个字节，将这些字符串顺序连接成一个特征字符串S。
+判重算法：对于两篇网页/文本，计算S1和S2的LCS，如果len(LCS)/min(len(S1), len(S2)) &gt; 0.6则判定为重复。</p>
+</li>
+</ol><p>去重后生成一个全词集合文本，格式如下：</p>
+
+<pre><code>word1 \t docid_i \t offset_i \t docid_k \t offset_k \t …
+word2 \t docid_j \t offset_j \t …
+…
+</code></pre>
+
+<h4>
+<a name="calculate-similarity" class="anchor" href="#calculate-similarity"><span class="octicon octicon-link"></span></a>Calculate Similarity</h4>
+
+<p>网页/文本相似度计算基于VSM与余弦相似度，本项目中采用简化模型“tf-idf”。</p>
+
+<p>VSM、余弦相似度的相关资料附在Reference部分。</p>
+
+<h4>
+<a name="query-process" class="anchor" href="#query-process"><span class="octicon octicon-link"></span></a>Query Process</h4>
+
+<p>Linux 守护进程，实现cache</p>
+
+<h4>
+<a name="front-end" class="anchor" href="#front-end"><span class="octicon octicon-link"></span></a>Front End</h4>
+
+<p>使用PHP编写的前端网页</p>
+
+<h2>
 <a name="project-time-schedule" class="anchor" href="#project-time-schedule"><span class="octicon octicon-link"></span></a>Project Time Schedule</h2>
 
-<p>LUD = last updata date</p>
+<hr><p>LUD = last update date</p>
 
 <table>
 <thead><tr>
@@ -56,7 +154,7 @@
 <tbody>
 <tr>
 <td align="left">01</td>
-<td align="left">20130730</td>
+<td align="left">20130809</td>
 <td align="left">PreProcess</td>
 <td align="left"></td>
 </tr>
@@ -68,7 +166,7 @@
 </tr>
 <tr>
 <td align="left">03</td>
-<td align="left">-</td>
+<td align="left">20130812</td>
 <td align="left">CalcSimilarity</td>
 <td align="left"></td>
 </tr>
@@ -101,35 +199,35 @@
 <td align="center">001</td>
 <td align="left">20130722</td>
 <td align="left">0.1</td>
-<td align="left">generate_getfileinfo.py</td>
+<td align="left">getfileinfo.py</td>
 <td align="left">add:读取文件、解析内容方法</td>
 </tr>
 <tr>
 <td align="center">002</td>
 <td align="left">20130722</td>
 <td align="left">0.1</td>
-<td align="left">generate_ripepage.py</td>
+<td align="left">ripepage.py</td>
 <td align="left">add:生成抓取结果库文件</td>
 </tr>
 <tr>
 <td align="center">003</td>
 <td align="left">20130730</td>
 <td align="left">0.1</td>
-<td align="left">generate_queryindex.py</td>
+<td align="left">queryindex.py</td>
 <td align="left">add:生成关键词索引文件</td>
 </tr>
 <tr>
 <td align="center">004</td>
 <td align="left">20130809</td>
 <td align="left">0.2</td>
-<td align="left">generate_getfileinfo.py</td>
+<td align="left">getfileinfo.py</td>
 <td align="left">fix:解析方式，以空格替换任意空白符</td>
 </tr>
 <tr>
 <td align="center">005</td>
 <td align="left">20130809</td>
 <td align="left">0.2</td>
-<td align="left">generate_ripepage.py</td>
+<td align="left">ripepage.py</td>
 <td align="left">fix:不输出读取失败的文件、模拟重复</td>
 </tr>
 </tbody>
@@ -244,7 +342,7 @@
 <td align="left"></td>
 </tr>
 <tr>
-<td align="center">000</td>
+<td align="center">013</td>
 <td align="left">20130809</td>
 <td align="left">0.3</td>
 <td align="left">QueryDemo.cpp</td>
@@ -262,15 +360,34 @@
 <th align="left">code file</th>
 <th align="left">Description</th>
 </tr></thead>
-<tbody><tr>
-<td align="center">x</td>
+<tbody>
+<tr>
+<td align="center">001</td>
+<td align="left">20130812</td>
+<td align="left">0.5</td>
+<td align="left">DocumentKits.h</td>
+<td align="left">add:初始化文档向量、计算相似度方法</td>
+</tr>
+<tr>
+<td align="center">002</td>
+<td align="left">20130812</td>
+<td align="left">0.5</td>
+<td align="left">DocumentKits.cpp</td>
 <td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr></tbody>
+</tr>
+<tr>
+<td align="center">003</td>
+<td align="left">20130812</td>
+<td align="left">0.4</td>
+<td align="left">QueryDemo.cpp</td>
+<td align="left">update:测试计算相似度</td>
+</tr>
+</tbody>
 </table><h3>
-<a name="4-queryfrontend" class="anchor" href="#4-queryfrontend"><span class="octicon octicon-link"></span></a>4. QueryFrontEnd</h3>
+<a name="4-query-process" class="anchor" href="#4-query-process"><span class="octicon octicon-link"></span></a>4. Query Process</h3>
+
+<h3>
+<a name="5-queryfrontend" class="anchor" href="#5-queryfrontend"><span class="octicon octicon-link"></span></a>5. QueryFrontEnd</h3>
 
 <table>
 <thead><tr>
@@ -281,16 +398,16 @@
 <th align="left">Description</th>
 </tr></thead>
 <tbody><tr>
-<td align="center">x</td>
+<td align="center">-</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 </tr></tbody>
-</table><hr><h2>
+</table><h2>
 <a name="issue" class="anchor" href="#issue"><span class="octicon octicon-link"></span></a>Issue</h2>
 
-<ol>
+<hr><ol>
 <li><p>读取数据文件编码问题</p></li>
 <li><p>读取文件标签匹配问题</p></li>
 <li><p>标题多于一行</p></li>
@@ -300,15 +417,26 @@
 <li><p>c++容器变量空间，堆／栈</p></li>
 <li><p>c++ STL map按value排序</p></li>
 <li><p>内存优化</p></li>
-<li><p>CPU核心优化</p></li>
-</ol><hr><h2>
-<a name="qa" class="anchor" href="#qa"><span class="octicon octicon-link"></span></a>Q&amp;A</h2>
+<li><p>多线程优化</p></li>
+</ol><h2>
+<a name="q--a" class="anchor" href="#q--a"><span class="octicon octicon-link"></span></a>Q &amp; A</h2>
 
-<ol>
+<hr><h2>
+<a name="some-comment" class="anchor" href="#some-comment"><span class="octicon octicon-link"></span></a>Some Comment</h2>
+
+<hr><ol>
 <li><p>设计模式 单例模式etc</p></li>
 <li><p>rebuild 重构概念</p></li>
+<li><p>缓存cache</p></li>
 </ol><hr><h2>
-<a name="some-comment" class="anchor" href="#some-comment"><span class="octicon octicon-link"></span></a>Some Comment</h2>
+<a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ol>
+<li>分词原理</li>
+<li>VSM</li>
+<li>余弦相似度</li>
+<li>文本聚类</li>
+</ol>
       </section>
 
     </div>
