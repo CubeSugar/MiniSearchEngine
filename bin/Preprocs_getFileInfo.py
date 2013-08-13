@@ -58,7 +58,7 @@ def getFileInfo(filename):
 					#new_content_line = re.sub('\"', u'&quot;', new_content_line)
 					#new_content_line = re.sub("\'", u'&apos;', new_content_line)
 
-					new_content_line = re.sub('\s', u' ', each_line)
+					new_content_line = re.sub(r'\s+', u' ', each_line)
 					#get file content
 					ContentStr = ContentStr + new_content_line
 					
