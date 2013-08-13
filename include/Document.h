@@ -20,6 +20,7 @@ public:
 	bool m_isDuplicate;
 	map<string, int> m_UnqWords;
 	vector<string> m_TopWords;
+	map<string, double> m_DocVector;
 	
 public:
 	Document();
