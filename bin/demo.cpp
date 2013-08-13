@@ -27,23 +27,8 @@ int main(int argc, char * argv[])
     
     vector<string> StopWords;
     map<int, string> QueryIndex;
-    vector<Document*> DocumentsSet;
+    list<Document*> DocumentsSet;
     map<string, list<string> > AllWords;
-
-/*
-    int QueryOffset     = 14;//<query>
-    int QueryOffsetE    = 16;//</query>
-    int DocOffset       = 10;//<doc>
-    int DocOffsetE      = 12;//</doc>
-    int DocIDOffset     = 14;//<docid>
-    int DocIDOffsetE    = 16;//</docid>
-    int TitleOffset     = 14;//<title>
-    int TitleOffsetE    = 16;//</title>
-    int URLOffset       = 10;//<url>
-    int URLOffsetE      = 12;//</url>
-    int ContentOffset   = 18;//<content>
-    int ContentOffsetE  = 20;//</content>
-*/
     
     //设置宽字符环境
     //ios::sync_with_stdio(false);
@@ -60,12 +45,14 @@ int main(int argc, char * argv[])
 
     DKits.loadIndexLib(QueryIndexFile, QueryIndex);
 
+    /*
     for (map<int, string>::iterator itr1 = QueryIndex.begin();
          itr1 != QueryIndex.end();
          ++itr1)
     {
         cout << itr1->first << "\t" << itr1->second <<endl;
     }
+    */
 
     QueryIndexFile.close();
 
@@ -109,15 +96,16 @@ int main(int argc, char * argv[])
     map<int, string>::iterator itrindex = QueryIndex.begin();
     map<int, string>::iterator nxtindex = QueryIndex.begin();
     ++nxtindex;
-    bool a = true;
+    
     int RPFilePos;
+    list<Document *> querydocset;
     while (nxtindex != QueryIndex.end())
     {
         RPFilePos = itrindex->first + QueryOffset;     //query
-        cout << itrindex->second << endl;   
+        //cout << itrindex->second << endl;   
         wtrash = DKits.readWLine(infs16, RPFilePos);//query
 
-        while (RPFilePos < nxtindex->first - 2)
+        while (RPFilePos < (nxtindex->first - QueryOffsetE - 4))
         {   
             Document *Doc = new Document;
 
@@ -129,13 +117,6 @@ int main(int argc, char * argv[])
             RPFilePos = RPFilePos + DocIDOffset;
             DocID = DKits.readWLine(infs16, RPFilePos);//docid
             Doc->m_DocID = DKits.convertWtStr(DocID);
-            
-            if (a)
-            {
-                cout << Doc->m_DocID << endl;
-                a = false;
-            }
-            
 
             RPFilePos = RPFilePos + URLOffset;
             URL = DKits.readWLine(infs16, RPFilePos);//url
@@ -174,17 +155,25 @@ int main(int argc, char * argv[])
             //cout << endl;
             */
 
-            DocumentsSet.push_back(Doc);
+            //DocumentsSet.push_back(Doc);
+            querydocset.push_back(Doc);
         }
+
+
+        cout << "before delDuplicate, size = " << querydocset.size() << endl;
+
+        DKits.delDuplicate(querydocset);
+
+        cout << "after delDuplicate, size = " << querydocset.size() << endl;
+
+        DocumentsSet.splice(DocumentsSet.end(), querydocset);
+
+        querydocset.clear();
 
         ++itrindex;
         ++nxtindex;
         wline = L"";
         wtrash = L"";
-        a = true;
-        
-        //DKits.delDuplicate(DocumentsSet);
-
     }
     cout << "DocumentsSet size = " << DocumentsSet.size() << endl;
     //cout << "DocumentsSet capa = " << DocumentsSet.capacity() << endl;
@@ -194,6 +183,61 @@ int main(int argc, char * argv[])
 
     cout << "all words size = " << AllWords.size() << endl;
 
+    //-----------------------------------------
+    map<string, int> DocHash;
+    int index = 0;
+
+    for (list<Document *>::iterator itrdoc = DocumentsSet.begin();
+         itrdoc != DocumentsSet.end();
+         ++itrdoc)
+    {
+        DocHash[(**itrdoc).m_DocID] = index++;
+
+        DKits.initDocVector(AllWords, **itrdoc);
+
+        cout << "initDocVector = " << index << endl;
+    }
+
+    ofstream SmlrtyMtrxFile;
+    string outfile = "../data/SmlrtyMtrx.lib";
+    SmlrtyMtrxFile.open(outfile.c_str(), ios::out | ios::binary);
+    if(!SmlrtyMtrxFile.is_open())
+    {
+        cout << "Open SmlrtyMtrxFile error," << endl ;
+        return 0;
+    }
+
+
+    vector<double> SimilarityMatrix;
+    double smlrty = 0.0;
+    for (list<Document *>::iterator itrdoci = DocumentsSet.begin();
+         itrdoci != DocumentsSet.end();
+         ++itrdoci)
+    {
+        for (list<Document *>::iterator itrdocj = itrdoci;
+             itrdocj != DocumentsSet.end();
+             ++itrdocj)
+        {
+            if (itrdocj == itrdoci)
+            {
+                SimilarityMatrix.push_back(1.0);
+                smlrty = 1.0;
+                continue;
+            }
+            else
+            {
+                smlrty = DKits.calcDocSimilarity(**itrdoci, **itrdocj);
+                SimilarityMatrix.push_back(smlrty);
+            }
+            
+            SmlrtyMtrxFile << smlrty << " ";
+        }
+
+        SmlrtyMtrxFile << endl;
+    }
+    
+    SmlrtyMtrxFile.close();
+    /*
     ofstream AllWordsFile;
     string outfile = "../data/allwods.lib";
     AllWordsFile.open(outfile.c_str(), ios::out | ios::binary);
@@ -219,6 +263,8 @@ int main(int argc, char * argv[])
     }
 
     AllWordsFile.close();
+    */
+
 	return 0;
 }
 
