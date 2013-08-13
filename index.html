@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Minisearchengine by CubeSugar</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/CubeSugar/MiniSearchEngine">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/CubeSugar/MiniSearchEngine/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/CubeSugar/MiniSearchEngine/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Minisearchengine</h1>
+          <p>mini search engine</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/CubeSugar">CubeSugar</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="minisearchengine" class="anchor" href="#minisearchengine"><span class="octicon octicon-link"></span></a>MiniSearchEngine</h1>
+
+<hr><h2>
+<a name="project-time-schedule" class="anchor" href="#project-time-schedule"><span class="octicon octicon-link"></span></a>Project Time Schedule</h2>
+
+<p>LUD = last updata date</p>
+
+<table>
+<thead><tr>
+<th align="left">N</th>
+<th align="left">LUD</th>
+<th align="left">Project Phase</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">01</td>
+<td align="left">20130730</td>
+<td align="left">PreProcess</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">02</td>
+<td align="left">20130809</td>
+<td align="left">DelDuplicate</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">03</td>
+<td align="left">-</td>
+<td align="left">CalcSimilarity</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">04</td>
+<td align="left">-</td>
+<td align="left">QueryFrontEnd</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">05</td>
+<td align="left">-</td>
+<td align="left">WebPage</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table><h3>
+<a name="1-preprocess--build-data-library-file--index" class="anchor" href="#1-preprocess--build-data-library-file--index"><span class="octicon octicon-link"></span></a>1. PreProcess / Build Data Library File &amp; Index</h3>
+
+<table>
+<thead><tr>
+<th align="center">N</th>
+<th align="left">LUD</th>
+<th align="left">V</th>
+<th align="left">code file</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">001</td>
+<td align="left">20130722</td>
+<td align="left">0.1</td>
+<td align="left">generate_getfileinfo.py</td>
+<td align="left">add:读取文件、解析内容方法</td>
+</tr>
+<tr>
+<td align="center">002</td>
+<td align="left">20130722</td>
+<td align="left">0.1</td>
+<td align="left">generate_ripepage.py</td>
+<td align="left">add:生成抓取结果库文件</td>
+</tr>
+<tr>
+<td align="center">003</td>
+<td align="left">20130730</td>
+<td align="left">0.1</td>
+<td align="left">generate_queryindex.py</td>
+<td align="left">add:生成关键词索引文件</td>
+</tr>
+<tr>
+<td align="center">004</td>
+<td align="left">20130809</td>
+<td align="left">0.2</td>
+<td align="left">generate_getfileinfo.py</td>
+<td align="left">fix:解析方式，以空格替换任意空白符</td>
+</tr>
+<tr>
+<td align="center">005</td>
+<td align="left">20130809</td>
+<td align="left">0.2</td>
+<td align="left">generate_ripepage.py</td>
+<td align="left">fix:不输出读取失败的文件、模拟重复</td>
+</tr>
+</tbody>
+</table><h3>
+<a name="2-delduplicate--build-query-keywords-file" class="anchor" href="#2-delduplicate--build-query-keywords-file"><span class="octicon octicon-link"></span></a>2. DelDuplicate &amp; Build Query Keywords File</h3>
+
+<table>
+<thead><tr>
+<th align="center">N</th>
+<th align="left">LUD</th>
+<th align="left">V</th>
+<th align="left">code file</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">001</td>
+<td align="left">20130805</td>
+<td align="left">0.1</td>
+<td align="left">Document.h</td>
+<td align="left">add:定义Document类</td>
+</tr>
+<tr>
+<td align="center">002</td>
+<td align="left">20130805</td>
+<td align="left">0.1</td>
+<td align="left">Document.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">003</td>
+<td align="left">20130805</td>
+<td align="left">0.1</td>
+<td align="left">DocumentKits.h</td>
+<td align="left">add:读取正文、载入文件、转换编码函数</td>
+</tr>
+<tr>
+<td align="center">004</td>
+<td align="left">20130805</td>
+<td align="left">0.1</td>
+<td align="left">DocumentKits.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">005</td>
+<td align="left">20130805</td>
+<td align="left">0.1</td>
+<td align="left">QueryDemo.cpp</td>
+<td align="left">add:查询测试模块</td>
+</tr>
+<tr>
+<td align="center">005</td>
+<td align="left">20130806</td>
+<td align="left">0.2</td>
+<td align="left">Document.h</td>
+<td align="left">fix:以重载关系操作符代替比较函数</td>
+</tr>
+<tr>
+<td align="center">006</td>
+<td align="left">20130806</td>
+<td align="left">0.2</td>
+<td align="left">Document.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">007</td>
+<td align="left">20130806</td>
+<td align="left">0.2</td>
+<td align="left">DocumentKits.h</td>
+<td align="left">add:分词、去重函数</td>
+</tr>
+<tr>
+<td align="center">008</td>
+<td align="left">20130806</td>
+<td align="left">0.2</td>
+<td align="left">DocumentKits.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">009</td>
+<td align="left">20130808</td>
+<td align="left">0.3</td>
+<td align="left">DocumentKits.h</td>
+<td align="left">update:封装为类</td>
+</tr>
+<tr>
+<td align="center">010</td>
+<td align="left">20130808</td>
+<td align="left">0.3</td>
+<td align="left">DocumentKits.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">001</td>
+<td align="left">20130808</td>
+<td align="left">0.2</td>
+<td align="left">QueryDemo.cpp</td>
+<td align="left">update:</td>
+</tr>
+<tr>
+<td align="center">011</td>
+<td align="left">20130809</td>
+<td align="left">0.4</td>
+<td align="left">DocumentKits.h</td>
+<td align="left">add:生成查询词库方法</td>
+</tr>
+<tr>
+<td align="center">012</td>
+<td align="left">20130809</td>
+<td align="left">0.4</td>
+<td align="left">DocumentKits.cpp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">000</td>
+<td align="left">20130809</td>
+<td align="left">0.3</td>
+<td align="left">QueryDemo.cpp</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table><h3>
+<a name="3-calcsimilarity" class="anchor" href="#3-calcsimilarity"><span class="octicon octicon-link"></span></a>3. CalcSimilarity</h3>
+
+<table>
+<thead><tr>
+<th align="center">N</th>
+<th align="left">LUD</th>
+<th align="left">V</th>
+<th align="left">code file</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody><tr>
+<td align="center">x</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr></tbody>
+</table><h3>
+<a name="4-queryfrontend" class="anchor" href="#4-queryfrontend"><span class="octicon octicon-link"></span></a>4. QueryFrontEnd</h3>
+
+<table>
+<thead><tr>
+<th align="center">N</th>
+<th align="left">LUD</th>
+<th align="left">V</th>
+<th align="left">code file</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody><tr>
+<td align="center">x</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr></tbody>
+</table><hr><h2>
+<a name="issue" class="anchor" href="#issue"><span class="octicon octicon-link"></span></a>Issue</h2>
+
+<ol>
+<li><p>读取数据文件编码问题</p></li>
+<li><p>读取文件标签匹配问题</p></li>
+<li><p>标题多于一行</p></li>
+<li><p>文章空白符、换行符处理方式</p></li>
+<li><p>生成文件索引的字节位置在query标签前</p></li>
+<li><p>取top10 受排序影响，同词频的词导致不同的top10，并影响结果</p></li>
+<li><p>c++容器变量空间，堆／栈</p></li>
+<li><p>c++ STL map按value排序</p></li>
+<li><p>内存优化</p></li>
+<li><p>CPU核心优化</p></li>
+</ol><hr><h2>
+<a name="qa" class="anchor" href="#qa"><span class="octicon octicon-link"></span></a>Q&amp;A</h2>
+
+<ol>
+<li><p>设计模式 单例模式etc</p></li>
+<li><p>rebuild 重构概念</p></li>
+</ol><hr><h2>
+<a name="some-comment" class="anchor" href="#some-comment"><span class="octicon octicon-link"></span></a>Some Comment</h2>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
