@@ -10,6 +10,7 @@
 #include <locale>
 
 #include "MiniSearchEngineStd.h"
+#include "Configuration.h"
 #include "Document.h"
 #include "DocumentKits.h"
 
@@ -19,6 +20,16 @@ const static int BUF_SIZE = 2*1024*1024;
 
 int main(int argc, char * argv[])
 {
+    ifstream confile("../search.conf");
+    if (!confile.is_open())
+    {
+        cout << "can not open confile!" << endl;
+    }
+
+    Configuration conf(confile);
+
+    confile.close();
+
     DocumentKits DKits;
 
     wstring DocID = L"";
@@ -37,7 +48,7 @@ int main(int argc, char * argv[])
     //wcout.imbue(locale(""));
 
     //load index lib
-    ifstream QueryIndexFile("../data/index.lib");
+    ifstream QueryIndexFile(conf.getConfig(INDEX_FILE).c_str());
     if (!QueryIndexFile.is_open())
     {
         cout << "con not open index lib" << endl;
@@ -57,7 +68,7 @@ int main(int argc, char * argv[])
     QueryIndexFile.close();
 
     //load stop words
-    ifstream StopWordsFile("../src/stopList.txt");
+    ifstream StopWordsFile(conf.getConfig(STOPWORDS_FILE).c_str());
     if (!StopWordsFile.is_open())
     {
         cout << "can not open stopwordsfile" << endl;
@@ -68,16 +79,16 @@ int main(int argc, char * argv[])
     StopWordsFile.close();
 
 
-	//load ripe page lib
-	string infile = "../data/ripepage.lib";
-	
-	ifstream infs16(infile.c_str());
-	if(!infs16.is_open())
-	{
-		std::cout << "Open error," << infile <<std::endl;
-		return 0;
-	}
-	
+    //load ripe page lib
+    string infile = "../data/ripepage.lib";
+    
+    ifstream infs16(conf.getConfig(RIPEPAGE_FILE).c_str());
+    if(!infs16.is_open())
+    {
+        std::cout << "Open error," << infile <<std::endl;
+        return 0;
+    }
+    
     //skip UTF-16 LE BOM
     //int pos = 2;
 
@@ -177,7 +188,7 @@ int main(int argc, char * argv[])
     }
     cout << "DocumentsSet size = " << DocumentsSet.size() << endl;
     //cout << "DocumentsSet capa = " << DocumentsSet.capacity() << endl;
-	infs16.close();
+    infs16.close();
 
     DKits.generateAllWordsSet(DocumentsSet, AllWords);
 
@@ -195,11 +206,15 @@ int main(int argc, char * argv[])
 
         DKits.initDocVector(AllWords, **itrdoc);
 
-        cout << "initDocVector = " << index << endl;
+        //cout << "initDocVector = " << index << endl;
+        if (index % 100 == 0)
+        {
+            cout << (double)index / DocumentsSet.size() << endl;
+        }
     }
 
     ofstream SmlrtyMtrxFile;
-    string outfile = "../data/SmlrtyMtrx.lib";
+    string outfile = conf.getConfig(SMLRTY_FILE);
     SmlrtyMtrxFile.open(outfile.c_str(), ios::out | ios::binary);
     if(!SmlrtyMtrxFile.is_open())
     {
@@ -214,32 +229,28 @@ int main(int argc, char * argv[])
          itrdoci != DocumentsSet.end();
          ++itrdoci)
     {
-        for (list<Document *>::iterator itrdocj = itrdoci;
-             itrdocj != DocumentsSet.end();
-             ++itrdocj)
+        list<Document *>::iterator itrdocj = itrdoci;
+        SimilarityMatrix.push_back(1.0);
+        smlrty = 1.0;
+        SmlrtyMtrxFile << smlrty << endl;
+        ++itrdocj;
+
+        while (itrdocj != DocumentsSet.end())
         {
-            if (itrdocj == itrdoci)
-            {
-                SimilarityMatrix.push_back(1.0);
-                smlrty = 1.0;
-                continue;
-            }
-            else
-            {
-                smlrty = DKits.calcDocSimilarity(**itrdoci, **itrdocj);
-                SimilarityMatrix.push_back(smlrty);
-            }
-            
-            SmlrtyMtrxFile << smlrty << " ";
+            smlrty = DKits.calcDocSimilarity(**itrdoci, **itrdocj);
+            SimilarityMatrix.push_back(smlrty);
+            ++itrdocj;
+            SmlrtyMtrxFile << smlrty << endl;
         }
 
-        SmlrtyMtrxFile << endl;
+        break;
     }
     
     SmlrtyMtrxFile.close();
+    
     /*
     ofstream AllWordsFile;
-    string outfile = "../data/allwods.lib";
+    string outfile = conf.getConfig(INVERTEDINDEX_FILE);
     AllWordsFile.open(outfile.c_str(), ios::out | ios::binary);
     if(!AllWordsFile.is_open())
     {
@@ -265,7 +276,7 @@ int main(int argc, char * argv[])
     AllWordsFile.close();
     */
 
-	return 0;
+    return 0;
 }
 
 
