@@ -7,12 +7,12 @@
 
 DocumentKits::DocumentKits()
 {
-
-}
     
+}
+
 DocumentKits::~DocumentKits()
 {
-
+    
 }
 
 int DocumentKits::loadIndexLib(ifstream &queryindexfile, map<int, string> &indexlib)
@@ -44,16 +44,16 @@ wstring DocumentKits::readWLine(ifstream &utf16file, int &pos)
 {
 	char cc[3]={'\0'} ;/*当前读入的字符*/
 	char pc[3]={'\0'} ;/*当前的前驱的字符*/
-
+    
     wstring wline = L"";
-
+    
     utf16file.seekg(pos, ios::beg);
-
+    
     bool BeginFlag = false;
     bool EndFlag = false;
     
 	while (utf16file.read(cc, 2))
-	{	
+	{
 	    //一次读入两个字节
         unsigned short wc;
 		
@@ -74,7 +74,7 @@ wstring DocumentKits::readWLine(ifstream &utf16file, int &pos)
 		    wc = (unsigned char)pc[1] ;
 		    wc = wc << 8;
 		    wc += (unsigned char)pc[0];
-		
+            
 		    wline += wc;
 		}
 		
@@ -83,7 +83,7 @@ wstring DocumentKits::readWLine(ifstream &utf16file, int &pos)
 		
 		BeginFlag = true;
 	}
-
+    
     return wline;
 }
 
@@ -97,17 +97,17 @@ int DocumentKits::segementWords(const wstring &wline, map<string, int>  &unqword
         wstring wstr_with_black;
         CELUSSegOption::SetSEG_TAG("SingleSpace");
 	    wstring SegTag(L" ");
-
+        
 	    CELUSSeg::BMMSeg(wline, wstr_with_black);
 	    segwordsstr = codeTransformer.wstr2utf(wstr_with_black);
-        //log 
+        //log
     }
     catch(...)
     {
         //cout << "error in test, ensure config elus.ini" << endl;
         //log
     }
-
+    
     string word;
     istringstream wordstream(segwordsstr);
     
@@ -118,13 +118,13 @@ int DocumentKits::segementWords(const wstring &wline, map<string, int>  &unqword
     	++unqwords[word];
     	//++sum;
     }
-
+    
     /*log
-    for (map<string, int>::iterator itr = unqwords.begin(); itr != unqwords.end(); ++itr)
-	{
-		cout << itr->first << "\t" << itr->second << endl;
-	}
-	*/
+     for (map<string, int>::iterator itr = unqwords.begin(); itr != unqwords.end(); ++itr)
+     {
+     cout << itr->first << "\t" << itr->second << endl;
+     }
+     */
 	//cout << "sum = " << sum << endl;
     return 0;
 }
@@ -140,14 +140,14 @@ string DocumentKits::convertWtStr(wstring &wstr)
 int DocumentKits::getTopWords(const map<string, int> &unqwords, vector<string> &topwords)
 {
     multimap<int, string> unqwordsbyfrq;
-    for (map<string, int>::const_iterator itr_unq = unqwords.begin(); 
+    for (map<string, int>::const_iterator itr_unq = unqwords.begin();
          itr_unq != unqwords.end(); ++itr_unq)
     {
         unqwordsbyfrq.insert(make_pair(itr_unq->second, itr_unq->first));
     }
-
+    
     int counter = 10;
-    for (multimap<int, string>::reverse_iterator itr_frq = unqwordsbyfrq.rbegin(); 
+    for (multimap<int, string>::reverse_iterator itr_frq = unqwordsbyfrq.rbegin();
          itr_frq != unqwordsbyfrq.rend(); ++itr_frq)
     {
         if (counter < 1)
@@ -157,7 +157,7 @@ int DocumentKits::getTopWords(const map<string, int> &unqwords, vector<string> &
         topwords.push_back(itr_frq->second);
         --counter;
     }
-
+    
     return 0;
 }
 
@@ -167,7 +167,7 @@ int DocumentKits::removeStopWords(const vector<string> &stopwords, map<string, i
     {
         unqwords.erase(*itr);
     }
-
+    
     return 0;
 }
 
@@ -175,7 +175,7 @@ int DocumentKits::delDuplicate(list<Document *> &documentset)
 {
     //itrdocf --> fix
     //itrdocm --> move
-   
+    
     for (list<Document *>::iterator itrdocf = documentset.begin();
          itrdocf != documentset.end();
          ++itrdocf)
@@ -210,13 +210,13 @@ int DocumentKits::generateAllWordsSet(const list<Document *> &documentset, map<s
              ++itrwords)
         {
             allwordset[itrwords->first].push_back((*itrdoc)->m_DocID);
-
+            
             //int to string
             string pos;
             stringstream sst;
             sst << (*itrdoc)->m_DocPos;
             sst >> pos;
-
+            
             allwordset[itrwords->first].push_back(pos);
         }
     }
@@ -226,17 +226,17 @@ int DocumentKits::generateAllWordsSet(const list<Document *> &documentset, map<s
 int DocumentKits::initDocVector(const map<string, list<string> > &allwords, Document &doc)
 {
     //cout << "docid = " << doc.m_DocID << endl;
-    double sumw = 0.0;
+    double len = 0.0;
     for (map<string, int>::iterator itrword = doc.m_UnqWords.begin();
          itrword != doc.m_UnqWords.end();
          ++itrword)
     {
         //cout << "sumw = " << sumw << endl;
-
+        
         map<string, list<string> >::const_iterator itrall = allwords.find(itrword->first);
-
+        
         //cout << "on finding " << endl;
-
+        
         if (itrall != allwords.end())
         {
             //cout << "find & copy" << " ";
@@ -244,56 +244,38 @@ int DocumentKits::initDocVector(const map<string, list<string> > &allwords, Docu
             doc.m_DocVector[itrword->first] = weight;
             
             //cout << "copy done!" << " ";
-            sumw += weight;
+            len += weight * weight;
         }
-        
     }
-
+    
     //cout << "sumw = " << sumw << endl;
-
+    
     //gui 1 hua
     for (map<string, double>::iterator itr = doc.m_DocVector.begin();
          itr != doc.m_DocVector.end();
          ++itr)
     {
-        itr->second /= sumw;
+        itr->second /= sqrt(len);
     }
-
+    
     //cout << "gui 1 hua done!" << endl;
     return 0;
 }
 
 double DocumentKits::calcDocSimilarity(const Document &doc1, const Document &doc2)
 {
-    double subsum = 0.0;
-    double lendoc1 = 0.0;
-    double lendoc2 = 0.0;
     double similarity = 0.0;
-
+    
     for (map<string, double>::const_iterator itr1 = doc1.m_DocVector.begin();
          itr1 != doc1.m_DocVector.end();
          ++itr1)
     {
-        lendoc1 += itr1->second * itr1->second;
-
         map<string, double>::const_iterator itr2 = doc2.m_DocVector.find(itr1->first);
         if (itr2 != doc2.m_DocVector.end())
         {
-            subsum += itr1->second * itr2->second;
+            similarity += itr1->second * itr2->second;
         }
     }
-
-    //cout << "fen zi = " << subsum << endl;
-    //cout << "length 1 = " << lendoc1 << endl;
-
-    for (map<string, double>::const_iterator itr2 = doc2.m_DocVector.begin();
-         itr2 != doc2.m_DocVector.end();
-         ++itr2)
-    {
-        lendoc2 += itr2->second * itr2->second;
-    }
-
-    similarity = subsum / (sqrt(lendoc1) * sqrt(lendoc2));
-
+    
     return similarity;
 }
