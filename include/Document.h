@@ -9,6 +9,12 @@
 
 using namespace std;
 
+struct DocAbstract
+{
+	string m_URL;
+	string m_Title;
+};
+
 class Document
 {
 public:
@@ -24,13 +30,13 @@ public:
 	
 public:
 	Document();
-
+    
 	~Document();
-
+    
 	int compareDocuments(Document &otherdoc);
-
+    
 	bool operator== (const Document &otherdoc);
-
+    
 	bool operator!= (const Document &otherdoc);
 };
 

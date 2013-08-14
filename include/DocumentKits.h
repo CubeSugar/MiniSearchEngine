@@ -19,29 +19,29 @@ class DocumentKits
 {
 public:
     DocumentKits();
-
+    
     ~DocumentKits();
-
+    
     int loadIndexLib(ifstream &queryindexfile, map<int, string> &indexlib);
-
+    
     int loadStopWords(ifstream &stopwordsfile, vector<string> &stopwords);
-
+    
     wstring readWLine(ifstream &utf16file, int &pos);
-
+    
     int segementWords(const wstring &wline, map<string, int>  &unqwords);
-
+    
     int removeStopWords(const vector<string> &stopwords, map<string, int> &unqwords);
-
+    
     string convertWtStr(wstring &wstr);
-
+    
     int getTopWords(const map<string, int> &unqwords, vector<string> &topwords);
-
+    
     int delDuplicate(list<Document *> &documentset);
-
+    
     int generateAllWordsSet(const list<Document *> &documentset, map<string, list<string> > &allwordset);
-
+    
     int initDocVector(const map<string, list<string> > &allwords, Document &doc);
-
+    
     double calcDocSimilarity(const Document &doc1, const Document &doc2);
 };
 
