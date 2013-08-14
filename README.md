@@ -1,6 +1,9 @@
 MiniSearchEngine
 ================
 
+__文档版权：__ 自由转载－非商用－非衍生－保持署名 / Creative Commons Attribution-NonCommercial-NoDerivs 3.0
+
+__代码版权：__ GPLv3
 
 ## Brief Introduction ##
 ---
@@ -22,21 +25,21 @@ MiniSearchEngine
 
 <p>
 MiniSearchEngine<br>
-├ bin<br>
-├ data<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;├ Raw_Data<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;├ ripepage.lib<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;├ query.lib<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;└ index.lib<br>
-├ include<br>
-├ lib<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;├ libcode.a<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;└ libelus.a<br>
-├ log<br>
-├ src<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;└ stopwordlist.txt<br>
-├ search_engine.conf<br>
-└ Makefile<br>
+┣ bin<br>
+┣ data<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Raw_Data<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ ripepage.lib<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ query.lib<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┗ index.lib<br>
+┣ include<br>
+┣ lib<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ libcode.a<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┗ libelus.a<br>
+┣ log<br>
+┣ src<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┗ stopwordlist.txt<br>
+┣ search_engine.conf<br>
+┗ Makefile<br>
 </p>
 
 
