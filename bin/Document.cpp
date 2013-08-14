@@ -3,7 +3,7 @@
 
 Document::Document()
 {
-
+    
 }
 
 Document::~Document()
@@ -21,7 +21,7 @@ Document::~Document()
 int Document::compareDocuments(Document &otherdoc)
 {
 	int counter = 0;
-
+    
 	for (vector<string>::iterator itrthis = this->m_TopWords.begin();
 	     itrthis != this->m_TopWords.end();
 	     ++itrthis)
@@ -36,7 +36,7 @@ int Document::compareDocuments(Document &otherdoc)
 			}
 		}
 	}
-
+    
 	if (counter >= 6)
 	{
 		//this->m_isDuplicate = true;
@@ -51,7 +51,7 @@ int Document::compareDocuments(Document &otherdoc)
 bool Document::operator== (const Document &otherdoc)
 {
 	int counter = 0;
-
+    
 	for (vector<string>::iterator itrthis = this->m_TopWords.begin();
 	     itrthis != this->m_TopWords.end();
 	     ++itrthis)
@@ -66,7 +66,7 @@ bool Document::operator== (const Document &otherdoc)
 			}
 		}
 	}
-
+    
 	if (counter >= 6)
 	{
 		//this->m_isDuplicate = true;
