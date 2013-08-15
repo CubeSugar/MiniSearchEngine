@@ -26,12 +26,24 @@ __代码版权：__ GPLv3
 <p>
 MiniSearchEngine<br>
 ┣ bin<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Configuration.cpp<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ dem.cppo<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Document.cpp<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ DocumentKits.cpp<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ SearchEngineServer.cpp<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ TcpSocket.cpp<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┗ QueryClientDemo<br>
 ┣ data<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Raw_Data<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┣ ripepage.lib<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┣ query.lib<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┗ index.lib<br>
 ┣ include<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Configuration.h<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ Document.h<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ DocumentKits.h<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┣ MiniSearchEngineStd.h<br>
+┃&nbsp;&nbsp;&nbsp;&nbsp;┗ TcpSocket.h<br>
 ┣ lib<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┣ libcode.a<br>
 ┃&nbsp;&nbsp;&nbsp;&nbsp;┗ libelus.a<br>
@@ -85,7 +97,7 @@ MiniSearchEngine<br>
 
 VSM、余弦相似度的相关资料附在Reference部分。
 
-#### Query Process ####
+#### SearchEngineServer Daemon Process ####
 Linux 守护进程，实现cache
 
 #### Front End ####
@@ -101,8 +113,8 @@ LUD = last update date
  01   | 20130809 | PreProcess          |
  02   | 20130809 | DelDuplicate        |
  03   | 20130812 | CalcSimilarity      |
- 04   | -        | QueryFrontEnd       |
- 05   | -        | WebPage             |
+ 04   | 20130815 | SearchEngineServer  | DaemonProcess
+ 05   | -        | QueryFrontEnd       | PHP WebPage
   
 
 ### 1. PreProcess / Build Data Library File & Index ###
@@ -110,11 +122,11 @@ LUD = last update date
 
   N   |    LUD   |    V   |             code file           |          Description       
 :----:|:---------|:-------|:--------------------------------|:-----------------------------
- 001  | 20130722 | 0.1    | getfileinfo.py         | add:读取文件、解析内容方法
- 002  | 20130722 | 0.1    | ripepage.py            | add:生成抓取结果库文件
- 003  | 20130730 | 0.1    | queryindex.py          | add:生成关键词索引文件
- 004  | 20130809 | 0.2    | getfileinfo.py         | fix:解析方式，以空格替换任意空白符
- 005  | 20130809 | 0.2    | ripepage.py            | fix:不输出读取失败的文件、模拟重复
+ 001  | 20130722 | 0.1    | getfileinfo.py                  | add:读取文件、解析内容方法
+ 002  | 20130722 | 0.1    | ripepage.py                     | add:生成抓取结果库文件
+ 003  | 20130730 | 0.1    | queryindex.py                   | add:生成关键词索引文件
+ 004  | 20130809 | 0.2    | getfileinfo.py                  | fix:解析方式，以空格替换任意空白符
+ 005  | 20130809 | 0.2    | ripepage.py                     | fix:不输出读取失败的文件、模拟重复
 
 
 
@@ -138,6 +150,8 @@ LUD = last update date
  011  | 20130809 | 0.4    | DocumentKits.h                  | add:生成查询词库方法
  012  | 20130809 | 0.4    | DocumentKits.cpp                |
  013  | 20130809 | 0.3    | QueryDemo.cpp                   |
+ 014  | 20130815 | 0.1    | Configuration.h                 | add:配置类
+ 015  | 20130815 | 0.1    | Configuration.cpp               |
 
 ### 3. CalcSimilarity ###
 
@@ -149,7 +163,14 @@ LUD = last update date
  003  | 20130812 | 0.4    | QueryDemo.cpp                   | update:测试计算相似度
 
 
-### 4. Query Process ###
+### 4. SearchEngineServer ###
+
+  N   |    LUD   |    V   |             code file           |          Description       
+:----:|:---------|:-------|:--------------------------------|:-----------------------------
+ 001  | 20130815 | 0.1    | TcpSocket.h                     | add: 封装TCP 函数
+ 002  | 20130815 | 0.1    | TcpSocket.cpp                   |
+ 003  | 20130815 | 0.1    | SearchEngineServer.cpp          | add: 搜索引擎后台守护进程
+
 
 
 
