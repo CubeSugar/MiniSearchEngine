@@ -1,6 +1,9 @@
 #ifndef MINI_SEARCH_ENGINE_STD_H
 #define MINI_SEARCH_ENGINE_STD_H
 
+#include <string>
+using namespace std;
+
 //tag string length
 const int QueryOffset     = 14;//<query>
 const int QueryOffsetE    = 16;//</query>
@@ -28,5 +31,8 @@ const int DEBUG_LOG          = 8;
 //udp package type
 const int QUERYPACK          = 1;
 const int RESPONSEPACK       = 2;
+
+//config file
+const string CONFIG_FILE     = "../search.conf";
 
 #endif

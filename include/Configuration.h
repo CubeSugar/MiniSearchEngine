@@ -1,3 +1,6 @@
+#ifndef CONFIGURATION_H
+#define CONFIGURATION_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -18,8 +21,9 @@ public:
     
 public:
 	Configuration();
-	Configuration(ifstream &conffile);
 	~Configuration();
     
 	string getConfig(int name);
 };
+
+#endif
